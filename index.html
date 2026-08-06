@@ -14,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 <style>
@@ -261,6 +262,69 @@
   .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
   @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
 </style>
+
+<!-- ===== Arabic / English toggle + RTL support ===== -->
+<style id="i18n-css">
+  /* ---- language switch button ---- */
+  .langsw{display:inline-flex;align-items:center;gap:8px;flex:none;cursor:pointer;white-space:nowrap;
+    font-family:var(--sans);font-size:.86rem;font-weight:700;letter-spacing:.02em;color:#fff;
+    padding:9px 17px;border-radius:60px;border:1px solid rgba(255,138,30,.45);
+    background:rgba(255,138,30,.13);transition:.25s;line-height:1}
+  .langsw:hover{background:rgba(255,138,30,.28);border-color:var(--orange);
+    box-shadow:0 0 24px -6px var(--orange);transform:translateY(-1px)}
+  .langsw:active{transform:translateY(0)}
+  .langsw:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+  .langsw .lsw-ic{font-size:1rem;line-height:1;filter:drop-shadow(0 0 6px rgba(255,138,30,.7))}
+  .langsw .lsw-txt{font-family:'Cairo','Inter',system-ui,sans-serif}
+  header .bar{gap:16px}
+  @media(max-width:860px){.brand .proverb{max-width:38vw}}
+  @media(max-width:560px){.brand .proverb{max-width:30vw}
+    .langsw{padding:8px 13px;font-size:.8rem}}
+
+  /* ---- Arabic typography ---- */
+  html[lang="ar"] body{font-family:'Cairo','Inter',system-ui,sans-serif}
+  html[lang="ar"] .brand,html[lang="ar"] .hero h1,html[lang="ar"] .head h2,
+  html[lang="ar"] .card h3,html[lang="ar"] .tl h3,html[lang="ar"] .panel h3,
+  html[lang="ar"] .contact h2,html[lang="ar"] .neon-title,html[lang="ar"] .cred-group,
+  html[lang="ar"] .cert-body h4,html[lang="ar"] .hero .role{font-family:'Cairo',sans-serif}
+  /* latin tracking / uppercasing must not apply to Arabic */
+  html[lang="ar"] .kick,html[lang="ar"] .tagpill,html[lang="ar"] .stat .l,
+  html[lang="ar"] .sg h4,html[lang="ar"] .tl .when,html[lang="ar"] .card .tag,
+  html[lang="ar"] .cert-badge,html[lang="ar"] .scrollhint,html[lang="ar"] .cert-body .yr,
+  html[lang="ar"] .langsw{letter-spacing:normal;text-transform:none}
+  html[lang="ar"] .hero h1{line-height:1.28}
+  html[lang="ar"] .hero h1 .g{line-height:1.34;padding-bottom:.1em}
+  html[lang="ar"] .card h3{line-height:1.5}
+  html[lang="ar"] .cert-body h4{line-height:1.45}
+  html[lang="ar"] .neon-title{line-height:1.5}
+  html[lang="ar"] .stat .l{font-size:.82rem}
+
+  /* ---- RTL mirroring ---- */
+  [dir="rtl"] .sbar{left:auto;right:0}
+  [dir="rtl"] .herogrid{text-align:right}
+  [dir="rtl"] .fbadge.t{right:auto;left:-14px}
+  [dir="rtl"] .fbadge.b{left:auto;right:-18px}
+  [dir="rtl"] .card h3{padding-right:0;padding-left:54px}
+  [dir="rtl"] .card .tag{right:auto;left:22px}
+  [dir="rtl"] .tl{padding-left:0;padding-right:34px}
+  [dir="rtl"] .tl::before{left:auto;right:7px}
+  [dir="rtl"] .tl .it{padding:0 30px 40px 0}
+  [dir="rtl"] .tl .it::before{left:auto;right:-32px}
+  [dir="rtl"] .tl li{padding-left:0;padding-right:20px}
+  [dir="rtl"] .tl li::before{left:auto;right:0;content:"\25C3"}
+  [dir="rtl"] .edu .r{border-left:0;border-right:2px solid var(--line-2);padding-left:0;padding-right:14px}
+  [dir="rtl"] .clist .c .credlink{margin-left:0;margin-right:auto}
+  [dir="rtl"] .cert-card{text-align:right}
+  [dir="rtl"] .cert-badge{left:auto;right:10px}
+  [dir="rtl"] .cert-zoom{right:auto;left:10px}
+  [dir="rtl"] .neon-item{padding:18px 36px 18px 20px}
+  [dir="rtl"] .neon-item::before{left:auto;right:16px}
+  /* contact chips hold latin emails / a phone number: keep them LTR so bidi
+     does not reorder "+20 11 0478 2680" into "2680 0478 11 20+" */
+  [dir="rtl"] .clinks a{direction:ltr}
+  [dir="rtl"] .vmodal-close{right:auto;left:0}
+  @media(max-width:900px){[dir="rtl"] .herogrid{text-align:center}}
+</style>
 </head>
 <body>
 <canvas id="scene"></canvas>
@@ -277,6 +341,9 @@
       <a href="#skills">Skills</a>
       <a href="#contact">Contact</a>
     </nav>
+    <button id="langsw" class="langsw" type="button" aria-label="Switch language / تغيير اللغة" title="العربية / English">
+      <span class="lsw-ic" aria-hidden="true">⊕</span><span class="lsw-txt">العربية</span>
+    </button>
   </div>
 </header>
 
@@ -831,5 +898,98 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
   .vmodal.panel .vmodal-inner{width:min(1180px,100%)}
   .vmodal.panel .vmodal-frame-wrap{padding-top:0;height:min(82vh,760px)}
 </style>
+
+<!-- ===== Bilingual AR / EN engine ===== -->
+<script id="i18n-engine">
+(function(){
+  var I18N = {"text": {"Knowledge is the light that transforms ordinary minds into forces of change.": "العلم هو النور الذي يُحوّل العقول العادية إلى قوى للتغيير.", "Projects": "المشروعات", "Experience": "الخبرات", "Credentials": "المؤهلات", "Skills": "المهارات", "Contact": "تواصل", "EdTech Leadership & AI Integration": "قيادة تقنيات التعليم ودمج الذكاء الاصطناعي", "Dr. Abir Wafa": "د. عبير وفا", "Engineering the future of learning.": "نهندس مستقبل التعلّم.", "Head of EdTech & Instructional Design · Edulixa & Monglish International Academy": "رئيس قسم تقنيات التعليم والتصميم التعليمي · إديوليكسا وأكاديمية مونجليش الدولية", "Certified International Teacher Trainer, CELTA & IB PYP Educator with 20+ years transforming education across Egypt and Kuwait — building AI-driven platforms, training 1,000+ teachers, and co-authoring national curricula.": "مدرِّبة معلمين دولية معتمدة، حاملة شهادة CELTA ومعلمة معتمدة في برنامج السنوات الابتدائية IB PYP، بخبرة تتجاوز عشرين عامًا في تطوير التعليم بمصر والكويت — بناء منصات مدعومة بالذكاء الاصطناعي، وتدريب أكثر من 1000 معلم، والمشاركة في تأليف مناهج وطنية.", "Explore Projects →": "استكشف المشروعات ←", "Get in Touch": "تواصل معي", "AI Integration Specialist": "متخصصة في دمج الذكاء الاصطناعي", "Doctorate · MBA · CELTA": "دكتوراه · ماجستير إدارة أعمال · CELTA", "Scroll": "انزل للأسفل", "Years in Education": "سنة في مجال التعليم", "Teachers Trained": "معلم تم تدريبه", "EdTech Platforms": "منصة تعليمية رقمية", "Certifications": "شهادة معتمدة", "Signature Work": "أعمال مميزة", "Projects & Platforms": "المشروعات والمنصات", "AI-powered tools, planners, libraries and courses built across the Kids, Teens and Adults tracks. Hover a card — then click to open the live app.": "أدوات ومخططات ومكتبات ودورات مدعومة بالذكاء الاصطناعي، بُنيت لمسارات الأطفال والناشئين والبالغين. مرّر المؤشر على البطاقة ثم اضغط لفتح التطبيق.", "All": "الكل", "AI Platforms": "منصات الذكاء الاصطناعي", "Planning Tools": "أدوات التخطيط", "Libraries": "المكتبات", "Speaking Apps": "تطبيقات المحادثة", "Courses": "الدورات", "In Progress": "قيد التنفيذ", "Live": "مُتاح", "Open App ↗": "افتح التطبيق ↗", "Global Voices": "أصوات عالمية", "Flagship AI platform connecting the UN SDGs to language education through the IB inquiry framework — CEFR-aligned tasks with adaptive AI feedback for IB PYP learners.": "المنصة الرئيسية المدعومة بالذكاء الاصطناعي، تربط أهداف التنمية المستدامة للأمم المتحدة بتعليم اللغة عبر إطار الاستقصاء في البكالوريا الدولية — مهام متوافقة مع الإطار الأوروبي المرجعي وتغذية راجعة تكيّفية لمتعلمي IB PYP.", "AI": "ذكاء اصطناعي", "UN SDGs": "أهداف التنمية المستدامة", "IB Inquiry": "الاستقصاء IB", "CEFR": "الإطار الأوروبي المرجعي", "Real-Time Talking Avatar": "أفاتار محادثة فوري", "A real-time conversational avatar that lets learners practise speaking with an interactive AI character — instant pronunciation and fluency feedback in natural dialogue.": "أفاتار محادثة يعمل في الزمن الحقيقي يتيح للمتعلمين التدرّب على التحدث مع شخصية ذكاء اصطناعي تفاعلية — تغذية راجعة فورية للنطق والطلاقة داخل حوار طبيعي.", "Real-Time": "زمن حقيقي", "Conversational AI": "ذكاء اصطناعي حواري", "Speaking": "المحادثة", "Homespark — Speaking & Homework App": "هوم سبارك — تطبيق المحادثة والواجبات", "Turns homework into an unforgettable, fun learning experience — keeping students motivated and practising their speaking beyond the classroom.": "يحوّل الواجب المنزلي إلى تجربة تعلّم ممتعة لا تُنسى — يحفّز الطلاب على مواصلة التدرّب على التحدث خارج الفصل.", "Engagement": "الانخراط", "Gamified HW": "واجبات ملعّبة", "Speaking & Business Results Apps": "تطبيقات المحادثة ونتائج الإنجليزية للأعمال", "A suite of speaking applications spanning elementary to advanced levels, delivering measurable business-English results with AI-driven practice feedback.": "حزمة تطبيقات للمحادثة تمتد من المستوى المبتدئ إلى المتقدم، تحقّق نتائج قابلة للقياس في إنجليزية الأعمال مع تغذية راجعة مدعومة بالذكاء الاصطناعي.", "Elementary → Advanced": "من المبتدئ إلى المتقدم", "Business English": "إنجليزية الأعمال", "Mongiz and Imy": "مونجيز وآيمي", "A character-driven speaking companion where learners chat with Mongiz and Imy — playful AI guides that spark natural conversation and give instant pronunciation and fluency feedback.": "رفيق محادثة قائم على الشخصيات، يتحدّث فيه المتعلمون مع مونجيز وآيمي — مرشدان ذكيان مرحان يحفّزان الحوار الطبيعي ويقدّمان تغذية راجعة فورية للنطق والطلاقة.", "AI Characters": "شخصيات ذكية", "Conversation": "الحوار", "Interactive English Course": "دورة الإنجليزية التفاعلية", "A fully interactive English course with multimedia lessons, embedded practice and continuous feedback for immersive CEFR-aligned learning.": "دورة إنجليزية تفاعلية بالكامل تتضمن دروسًا متعددة الوسائط وتدريبات مدمجة وتغذية راجعة مستمرة، لتعلّم انغماسي متوافق مع الإطار الأوروبي المرجعي.", "Interactive": "تفاعلي", "Multimedia": "وسائط متعددة", "CELTA Digital Lesson Planner": "مخطط دروس CELTA الرقمي", "AI-powered planning tool embedding CELTA methodology for framework-aligned, professional lesson design at scale.": "أداة تخطيط مدعومة بالذكاء الاصطناعي تُدمج منهجية CELTA لتصميم دروس احترافية متوافقة مع الإطار وقابلة للتوسّع.", "AI Authoring": "تأليف بالذكاء الاصطناعي", "Lesson Design": "تصميم الدروس", "IB Digital Lesson Planner": "مخطط دروس البكالوريا الدولية الرقمي", "Planning tool embedding the PYP inquiry cycle, enabling framework-aligned IB lesson design with structured, standards-mapped templates.": "أداة تخطيط تُدمج دورة الاستقصاء في برنامج السنوات الابتدائية، وتتيح تصميم دروس IB متوافقة مع الإطار عبر قوالب منظمة ومرتبطة بالمعايير.", "Inquiry Cycle": "دورة الاستقصاء", "Planning": "التخطيط", "IB Unit of Inquiry Planner": "مخطط وحدات الاستقصاء IB", "A dedicated planner for building IB Units of Inquiry — mapping central ideas, lines of inquiry, and key concepts into coherent, transdisciplinary units.": "مخطط مخصّص لبناء وحدات الاستقصاء في البكالوريا الدولية — يربط الأفكار المركزية وخطوط الاستقصاء والمفاهيم الرئيسية في وحدات متكاملة عابرة للتخصصات.", "Unit of Inquiry": "وحدة استقصاء", "Transdisciplinary": "عابر للتخصصات", "Project Tracker": "متتبّع المشروعات", "A tracking tool for managing instructional projects end-to-end — monitoring milestones, assigning ownership, and following progress in one place.": "أداة لإدارة المشروعات التعليمية من البداية إلى النهاية — متابعة المراحل الرئيسية وتحديد المسؤوليات وتتبّع التقدّم في مكان واحد.", "Tracking": "التتبّع", "Milestones": "المراحل الرئيسية", "Progress": "التقدّم", "Project Creator": "منشئ المشروعات", "A creation tool for designing instructional projects from the ground up — building plans, milestones, and ownership structures.": "أداة لتصميم المشروعات التعليمية من الصفر — بناء الخطط والمراحل الرئيسية وهياكل المسؤولية.", "Project Mgmt": "إدارة المشروعات", "Creation": "الإنشاء", "Digital Story Library": "مكتبة القصص الرقمية", "An interactive library of digital stories supporting reading fluency, comprehension and vocabulary growth for young learners.": "مكتبة تفاعلية من القصص الرقمية تدعم طلاقة القراءة والاستيعاب وتنمية المفردات للمتعلمين الصغار.", "Reading": "القراءة", "Young Learners": "المتعلمون الصغار", "Digital Math Library": "مكتبة الرياضيات الرقمية", "A curated digital library of interactive math resources and activities, building numeracy and problem-solving through engaging, leveled content.": "مكتبة رقمية منتقاة من مصادر وأنشطة الرياضيات التفاعلية، تبني المهارات العددية وحل المشكلات عبر محتوى جاذب ومتدرّج المستويات.", "Numeracy": "المهارات العددية", "Leveled": "متدرّج المستويات", "Claude for Work & Business": "كلود للعمل والأعمال", "A structured course training educators to integrate Claude and generative AI into daily instructional workflows — prompt engineering, adaptive tools, and AI-powered authoring.": "دورة منظمة تدرّب المعلمين على دمج كلود والذكاء الاصطناعي التوليدي في سياق العمل التعليمي اليومي — هندسة الأوامر، والأدوات التكيّفية، والتأليف المدعوم بالذكاء الاصطناعي.", "Generative AI": "ذكاء اصطناعي توليدي", "CPD": "التطوير المهني المستمر", "Prompt Eng.": "هندسة الأوامر", "Automated Observation Form — PLC & PD Dashboard": "نموذج الملاحظة الآلي — لوحة مجتمعات التعلّم المهني والتطوير المهني", "An automated classroom observation form that feeds live data straight into the PLC and PD dashboards — turning every observation into evidence-based coaching insights and professional-growth analytics.": "نموذج ملاحظة صفية آلي يغذّي لوحات مجتمعات التعلّم المهني والتطوير المهني ببيانات حيّة — ليحوّل كل ملاحظة إلى رؤى تدريبية قائمة على الأدلة وتحليلات للنمو المهني.", "Observation": "الملاحظة الصفية", "PLC": "مجتمعات التعلّم المهني", "PD Analytics": "تحليلات التطوير المهني", "Automation": "الأتمتة", "IB Mastery Course": "دورة إتقان البكالوريا الدولية", "A comprehensive professional course guiding educators to mastery of the IB framework — inquiry-based pedagogy, planning, and standards-aligned delivery.": "دورة مهنية شاملة تقود المعلمين إلى إتقان إطار البكالوريا الدولية — التربية القائمة على الاستقصاء، والتخطيط، والتنفيذ المتوافق مع المعايير.", "Teacher Training": "تدريب المعلمين", "Mastery": "الإتقان", "Monglish Interactive Journey": "رحلة مونجليش التفاعلية", "An interactive journey dashboard mapping the Monglish learning experience across tracks — milestones, progress and immersive activities in one place.": "لوحة رحلة تفاعلية ترسم تجربة التعلّم في مونجليش عبر المسارات — المراحل والتقدّم والأنشطة الانغماسية في مكان واحد.", "Dashboard": "لوحة معلومات", "Learning Journey": "رحلة التعلّم", "Career Journey": "المسار المهني", "Professional Experience": "الخبرة المهنية", "Two decades of progressive leadership in EdTech, instructional design, and teacher development.": "عقدان من القيادة المتدرّجة في تقنيات التعليم والتصميم التعليمي وتطوير المعلمين.", "Dec 2025 — Present": "ديسمبر 2025 — حتى الآن", "Head of EdTech & Instructional Design": "رئيس قسم تقنيات التعليم والتصميم التعليمي", "Monglish International Academy / Edulixa · Egypt": "أكاديمية مونجليش الدولية / إديوليكسا · مصر", "Lead AI adoption & digital transformation across all 3 learning tracks (Kids, Teens, Adults), powering the full Mongi-Immerse ecosystem.": "قيادة تبنّي الذكاء الاصطناعي والتحول الرقمي في المسارات التعليمية الثلاثة (الأطفال، الناشئون، البالغون)، بما يدعم منظومة Mongi-Immerse بالكامل.", "Architect structured AI-based PD programs for 50+ teachers — embedding generative AI, automation, adaptive tools, and prompt engineering into daily workflows.": "تصميم برامج تطوير مهني منظمة قائمة على الذكاء الاصطناعي لأكثر من 50 معلمًا — بدمج الذكاء الاصطناعي التوليدي والأتمتة والأدوات التكيّفية وهندسة الأوامر في العمل اليومي.", "Oversee all instructional materials, ensuring 100% CEFR alignment and pedagogical fidelity.": "الإشراف على جميع المواد التعليمية وضمان توافقها الكامل مع الإطار الأوروبي المرجعي ودقتها التربوية.", "Building": "بناء", "— connecting UN SDGs to language education through the IB inquiry framework.": "— لربط أهداف التنمية المستدامة بتعليم اللغة عبر إطار الاستقصاء في البكالوريا الدولية.", "Nov 2024 — Nov 2025": "نوفمبر 2024 — نوفمبر 2025", "Assistant Principal & Head of Planning & Controlling": "مساعد المدير ورئيس التخطيط والمتابعة", "Conducted systematic online class observations, raising instructional quality scores by ~25% through structured, improvement-focused feedback frameworks.": "تنفيذ ملاحظات صفية منهجية عبر الإنترنت، ورفع درجات جودة التدريس بنحو 25% من خلال أطر تغذية راجعة منظمة موجّهة للتحسين.", "Designed personalized teacher growth action plans aligned to individual needs and institutional KPIs.": "تصميم خطط عمل مخصّصة لنمو المعلمين تتوافق مع احتياجاتهم الفردية ومؤشرات الأداء المؤسسية.", "Trained staff in coaching techniques to reduce the affective barrier and support the emergence of learner confidence and spoken language.": "تدريب الفريق على أساليب التوجيه لتقليل الحاجز الوجداني ودعم ظهور ثقة المتعلم ولغته المنطوقة.", "Nov 2021 — Nov 2024": "نوفمبر 2021 — نوفمبر 2024", "English Teacher — IGCSE (0058)": "معلمة لغة إنجليزية — IGCSE (0058)", "Salahaldin International School · Alexandria, Egypt": "مدرسة صلاح الدين الدولية · الإسكندرية، مصر", "Delivered Cambridge IGCSE curriculum using interactive multimedia pedagogy and AI-enhanced differentiated tasks.": "تدريس منهج كامبريدج IGCSE باستخدام تربية تفاعلية متعددة الوسائط ومهام متمايزة معززة بالذكاء الاصطناعي.", "Facilitated school-wide CPD workshops on AI integration and digital learning tools.": "تنظيم ورش تطوير مهني على مستوى المدرسة حول دمج الذكاء الاصطناعي وأدوات التعلّم الرقمي.", "Aug 2004 — Sep 2021": "أغسطس 2004 — سبتمبر 2021", "Head of English Department / English Teacher": "رئيسة قسم اللغة الإنجليزية / معلمة لغة إنجليزية", "Ministry of Education · State of Kuwait": "وزارة التربية · دولة الكويت", "Co-authored official national English textbooks for Years 1–5 (published 2016), impacting hundreds of thousands of students annually.": "المشاركة في تأليف كتب اللغة الإنجليزية الوطنية الرسمية للصفوف الأول إلى الخامس (نُشرت 2016)، بأثر يشمل مئات الآلاف من الطلاب سنويًا.", "Trained 1,000+ teachers across Kuwait and Egypt, including Kuwait's landmark Technopad digital teaching initiative.": "تدريب أكثر من 1000 معلم في الكويت ومصر، بما في ذلك مبادرة «تكنوباد» الرائدة للتعليم الرقمي في الكويت.", "Delivered nationally televised MOE model lessons broadcast across Kuwait.": "تقديم دروس نموذجية لوزارة التربية بُثّت تلفزيونيًا على المستوى الوطني في الكويت.", "Received the Creative Teaching Award (2013–14) for an interactive phonics e-book recognised as an innovative digital resource.": "الحصول على جائزة التدريس الإبداعي (2013–2014) عن كتاب إلكتروني تفاعلي للفونيكس اعتُبر مصدرًا رقميًا مبتكرًا.", "Qualifications": "المؤهلات", "Education & Certifications": "التعليم والشهادات", "Select a verified certificate to open it in the viewer — with a Back button. Additional credentials are listed below.": "اختر شهادة موثّقة لعرضها في المستعرض — مع زر للعودة. وتُدرج المؤهلات الإضافية أدناه.", "Verified Certificates": "الشهادات الموثّقة", "Credentials & Honours": "المؤهلات والتكريمات", "Education": "تعليم", "Certification": "شهادة", "Doctorate — Curricula & Teaching Methods": "دكتوراه — المناهج وطرق التدريس", "Educational Curricula Design & Evidence-Based Teaching Methods": "تصميم المناهج التعليمية وطرق التدريس القائمة على الأدلة", "25 Jan 2026 · View certificate ↗": "25 يناير 2026 · عرض الشهادة ↗", "B.A. English Language": "بكالوريوس اللغة الإنجليزية", "Ain Shams University, Faculty of Al Alsun · Cairo": "جامعة عين شمس، كلية الألسن · القاهرة", "View certificate ↗": "عرض الشهادة ↗", "Cambridge · Teaching English to Speakers of Other Languages": "كامبريدج · تعليم الإنجليزية للناطقين بغيرها", "Oct 2023 · View certificate ↗": "أكتوبر 2023 · عرض الشهادة ↗", "IB PYP Certified Educator": "معلمة معتمدة في برنامج السنوات الابتدائية IB PYP", "International Baccalaureate Organization": "منظمة البكالوريا الدولية", "25 Nov 2025 · View certificate ↗": "25 نوفمبر 2025 · عرض الشهادة ↗", "Certified International Teacher Trainer": "مدرِّبة معلمين دولية معتمدة", "AOST & Egyptian Board Academy": "AOST وأكاديمية البورد المصري", "25 Sep 2025 · View certificate ↗": "25 سبتمبر 2025 · عرض الشهادة ↗", "Certified AI Trainer for Teachers": "مدرِّبة معتمدة للذكاء الاصطناعي للمعلمين", "Edulixa": "إديوليكسا", "2025 · View certificate ↗": "2025 · عرض الشهادة ↗", "CATBIS Advanced Teaching Techniques": "CATBIS — أساليب التدريس المتقدمة", "Cambridge Assessment": "كامبريدج للتقييم", "14 Mar 2024 · View certificate ↗": "14 مارس 2024 · عرض الشهادة ↗", "TKT — Teaching Knowledge Test": "TKT — اختبار معرفة التدريس", "Cambridge": "كامبريدج", "14 Aug 2006 · View certificate ↗": "14 أغسطس 2006 · عرض الشهادة ↗", "IGCSE Checkpoint Certified Teacher": "معلمة معتمدة IGCSE Checkpoint", "Cambridge Assessment International Education": "كامبريدج للتقييم الدولي للتعليم", "MBA — Business Administration": "ماجستير إدارة الأعمال", "R.B College ·": "كلية R.B ·", "June 2026": "يونيو 2026", "· Document coming soon": "· الوثيقة قريبًا", "Cambridge Primary Checkpoint": "كامبريدج Primary Checkpoint", "Artificial Intelligence in Education": "الذكاء الاصطناعي في التعليم", "Professional Development Program": "برنامج تطوير مهني", "Doctorate Degree in Curricula & Teaching Methods": "درجة الدكتوراه في المناهج وطرق التدريس", "Awarded": "مُنحت في", "25 Jan 2026": "25 يناير 2026", "· Educational Curricula Design & Evidence-Based Teaching Methods": "· تصميم المناهج التعليمية وطرق التدريس القائمة على الأدلة", "IB Certified Educator": "معلمة معتمدة من البكالوريا الدولية", "International Baccalaureate Organization ·": "منظمة البكالوريا الدولية ·", "25 Nov 2025": "25 نوفمبر 2025", "Certified Teacher Trainer": "مدرِّبة معلمين معتمدة", "AOST & Egyptian Board Academy ·": "AOST وأكاديمية البورد المصري ·", "25 Sep 2025": "25 سبتمبر 2025", "Expertise": "مجالات الخبرة", "Skills & Technologies": "المهارات والتقنيات", "EdTech & Authoring": "تقنيات التعليم والتأليف", "AI Tools & Automation": "أدوات الذكاء الاصطناعي والأتمتة", "Instructional Frameworks": "الأطر التعليمية", "AI & Digital Learning": "الذكاء الاصطناعي والتعلّم الرقمي", "Leadership & Languages": "القيادة واللغات", "LMS Administration": "إدارة نظم إدارة التعلّم", "Bloom's Taxonomy": "تصنيف بلوم", "CEFR (A1–C2)": "الإطار الأوروبي المرجعي (A1–C2)", "Generative AI Integration": "دمج الذكاء الاصطناعي التوليدي", "Prompt Engineering": "هندسة الأوامر", "Adaptive Learning": "التعلّم التكيّفي", "Speech Recognition": "التعرّف على الكلام", "Data-Driven Instruction": "التدريس القائم على البيانات", "UX for Learning": "تجربة المستخدم في التعلّم", "Teacher Training & CPD": "تدريب المعلمين والتطوير المهني", "Curriculum Development": "تطوير المناهج", "Digital Transformation": "التحول الرقمي", "EdTech Leadership": "قيادة تقنيات التعليم", "English (C2)": "الإنجليزية (C2)", "Arabic (Native)": "العربية (لغة أم)", "Let's build the future of learning.": "لنبنِ مستقبل التعلّم معًا.", "Open to collaborations, speaking, EdTech leadership and AI-in-education partnerships.": "مُنفتحة على التعاون، والمشاركة كمتحدثة، وقيادة تقنيات التعليم، وشراكات الذكاء الاصطناعي في التعليم.", "© 2026 Dr. Abir Ahmed Aly Wafa · Head of EdTech & Instructional Design · Edulixa & Monglish International Academy · Alexandria, Egypt": "© 2026 د. عبير أحمد علي وفا · رئيس قسم تقنيات التعليم والتصميم التعليمي · إديوليكسا وأكاديمية مونجليش الدولية · الإسكندرية، مصر", "← Back": "رجوع →"}, "attrs": {"Back": "رجوع", "Dr. Abir Wafa": "د. عبير وفا"}, "meta": {"ar": {"title": "د. عبير وفا — تقنيات التعليم والتصميم التعليمي · ملف أعمال ثلاثي الأبعاد", "desc": "د. عبير أحمد علي وفا — رئيس قسم تقنيات التعليم والتصميم التعليمي، متخصصة في دمج الذكاء الاصطناعي، مدرِّبة معلمين دولية معتمدة، ومعلمة CELTA و IB PYP.", "label": "English"}, "en": {"title": "Dr. Abir Wafa — EdTech & Instructional Design · 3D Portfolio", "desc": "Dr. Abir Ahmed Aly Wafa — Head of EdTech & Instructional Design, AI Integration Specialist, Certified International Teacher Trainer, CELTA & IB PYP Educator.", "label": "العربية"}}};
+  var DICT = I18N.text, ATTRS = I18N.attrs, META = I18N.meta;
+  var SKIP_TAGS = {SCRIPT:1,STYLE:1,NOSCRIPT:1,CANVAS:1,IFRAME:1,SVG:1};
+  var nodes = null, origs = null, attrNodes = null, attrOrigs = null;
+  var lang = 'en';
+  window.__i18nMissing = [];
+
+  function skipEl(el){
+    while(el && el.nodeType === 1){
+      if(SKIP_TAGS[el.tagName]) return true;
+      if(el.id === 'langsw') return true;
+      if(el.classList && (el.classList.contains('num') || el.classList.contains('no-i18n'))) return true;
+      el = el.parentElement;
+    }
+    return false;
+  }
+
+  function collect(){
+    nodes = []; origs = [];
+    var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+    var n;
+    while((n = w.nextNode())){
+      if(!n.nodeValue || !n.nodeValue.trim()) continue;
+      if(skipEl(n.parentElement)) continue;
+      nodes.push(n); origs.push(n.nodeValue);
+    }
+    attrNodes = []; attrOrigs = [];
+    var ATTR_LIST = ['aria-label','title','alt','placeholder'];
+    var all = document.body.querySelectorAll('[aria-label],[title],[alt],[placeholder]');
+    for(var i=0;i<all.length;i++){
+      if(all[i].id === 'langsw') continue;
+      for(var j=0;j<ATTR_LIST.length;j++){
+        var a = ATTR_LIST[j], v = all[i].getAttribute(a);
+        if(v && ATTRS[v.trim()] !== undefined){
+          attrNodes.push([all[i],a]); attrOrigs.push(v);
+        }
+      }
+    }
+  }
+
+  function apply(target){
+    if(!nodes) collect();
+    var missing = [];
+    for(var i=0;i<nodes.length;i++){
+      var o = origs[i];
+      if(target === 'en'){ nodes[i].nodeValue = o; continue; }
+      var m = o.match(/^(\s*)([\s\S]*?)(\s*)$/);
+      var core = m[2], tr = DICT[core];
+      if(tr === undefined){ if(core.length > 1) missing.push(core); nodes[i].nodeValue = o; }
+      else { nodes[i].nodeValue = m[1] + tr + m[3]; }
+    }
+    for(var k=0;k<attrNodes.length;k++){
+      var el = attrNodes[k][0], at = attrNodes[k][1], ov = attrOrigs[k];
+      el.setAttribute(at, target === 'en' ? ov : (ATTRS[ov.trim()] || ov));
+    }
+    window.__i18nMissing = missing;
+  }
+
+  function setLang(l, remember){
+    lang = (l === 'ar') ? 'ar' : 'en';
+    var html = document.documentElement;
+    html.setAttribute('lang', lang);
+    html.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+    apply(lang);
+    document.title = META[lang].title;
+    var md = document.querySelector('meta[name="description"]');
+    if(md) md.setAttribute('content', META[lang].desc);
+    var lbl = document.querySelector('#langsw .lsw-txt');
+    if(lbl) lbl.textContent = META[lang].label;
+    var btn = document.getElementById('langsw');
+    if(btn) btn.setAttribute('aria-pressed', lang === 'ar' ? 'true' : 'false');
+    if(remember){ try{ localStorage.setItem('abir-portfolio-lang', lang); }catch(e){} }
+    window.dispatchEvent(new Event('resize'));
+  }
+
+  function init(){
+    var btn = document.getElementById('langsw');
+    if(btn) btn.addEventListener('click', function(){ setLang(lang === 'ar' ? 'en' : 'ar', true); });
+    var saved = null;
+    try{ saved = localStorage.getItem('abir-portfolio-lang'); }catch(e){}
+    if(!saved && (navigator.language||'').toLowerCase().indexOf('ar') === 0) saved = 'ar';
+    if(saved === 'ar') setLang('ar', false); else setLang('en', false);
+    window.setLang = setLang;
+  }
+
+  if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', init); }
+  else { init(); }
+})();
+</script>
 </body>
 </html>
